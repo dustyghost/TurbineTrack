@@ -14,9 +14,6 @@ obj/
 # Logs
 *.log
 
-# EF Core migrations output
-Migrations/
-
 # SQLite DB files
 *.db
 *.sqlite
