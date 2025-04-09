@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TurbineTrack.Api.Data;
 using TurbineTrack.Api.Endpoints;
 using TurbineTrack.Api.Models;
+using TurbineTrack.Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,9 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod());
 });
 
+builder.Services.AddScoped<ITurbineRepository, TurbineRepository>();
+builder.Services.AddScoped<IRegionRepository, RegionRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,5 +40,6 @@ app.UseCors("AllowLocalhost");
 app.UseHttpsRedirection();
 
 app.MapTurbineEndpoints();
+app.MapRegionEndpoints();
 
 app.Run();

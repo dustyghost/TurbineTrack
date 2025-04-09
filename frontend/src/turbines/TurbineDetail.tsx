@@ -28,6 +28,8 @@ const TurbineDetail: React.FC = () => {
           <p><strong>Status:</strong> {turbine.status}</p>
           <p><strong>Power Output:</strong> {turbine.powerOutput} kW</p>
           <p><strong>Wind Speed:</strong> {turbine.windSpeed} m/s</p>
+          <p><strong>Country:</strong> {turbine.country} </p>
+          <p><strong>Area:</strong> {turbine.area} </p>
         </div>
       </div>
     </div>

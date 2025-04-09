@@ -1,6 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using TurbineTrack.Api.Data;
 using TurbineTrack.Api.Models;
+using TurbineTrack.Api.Repositories;
 
 namespace TurbineTrack.Api.Endpoints;
 
@@ -8,48 +7,28 @@ public static class TurbineEndpoints
 {
     public static void MapTurbineEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/", () => "Welcome to TurbineTrack API!").WithOpenApi();
-        
-        app.MapGet("/turbines", async (TurbineContext db) =>
-            await db.Turbines.ToListAsync());
+        app.MapGet("/turbines", async (ITurbineRepository repo) =>
+            Results.Ok(await repo.GetAllAsync()));
 
-        app.MapGet("/turbines/{id}", async (int id, TurbineContext db) =>
-            await db.Turbines.FindAsync(id)
-                is { } turbine
+        app.MapGet("/turbines/{id}", async (int id, ITurbineRepository repo) =>
+            await repo.GetByIdAsync(id) is { } turbine
                 ? Results.Ok(turbine)
                 : Results.NotFound());
 
-        app.MapPost("/turbines", async (Turbine turbine, TurbineContext db) =>
+        app.MapPost("/turbines", async (Turbine turbine, ITurbineRepository repo) =>
         {
-            db.Turbines.Add(turbine);
-            await db.SaveChangesAsync();
-            return Results.Created($"/turbines/{turbine.Id}", turbine);
+            var created = await repo.AddAsync(turbine);
+            return Results.Created($"/turbines/{created.Id}", created);
         });
 
-        app.MapPut("/turbines/{id}", async (int id, Turbine inputTurbine, TurbineContext db) =>
-        {
-            var turbine = await db.Turbines.FindAsync(id);
+        app.MapPut("/turbines/{id}", async (int id, Turbine turbine, ITurbineRepository repo) =>
+            await repo.UpdateAsync(id, turbine)
+                ? Results.NoContent()
+                : Results.NotFound());
 
-            if (turbine is null) return Results.NotFound();
-
-            turbine.Location = inputTurbine.Location;
-            turbine.Status = inputTurbine.Status;
-            turbine.PowerOutput = inputTurbine.PowerOutput;
-            turbine.WindSpeed = inputTurbine.WindSpeed;
-
-            await db.SaveChangesAsync();
-
-            return Results.NoContent();
-        });
-
-        app.MapDelete("/turbines/{id}", async (int id, TurbineContext db) =>
-        {
-            if (await db.Turbines.FindAsync(id) is not { } turbine)
-                return Results.NotFound();
-
-            db.Turbines.Remove(turbine);
-            await db.SaveChangesAsync();
-            return Results.NoContent();
-        });
+        app.MapDelete("/turbines/{id}", async (int id, ITurbineRepository repo) =>
+            await repo.DeleteAsync(id)
+                ? Results.NoContent()
+                : Results.NotFound());
     }
 }

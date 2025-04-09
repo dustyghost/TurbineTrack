@@ -7,5 +7,8 @@ namespace TurbineTrack.Api.Data
         : DbContext(options)
     {
         public DbSet<Turbine> Turbines { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Area> Areas { get; set; }
+
     }
 }
