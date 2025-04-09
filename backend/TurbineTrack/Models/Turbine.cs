@@ -13,5 +13,11 @@ namespace TurbineTrack.Api.Models
         public required string Status { get; set; }
         public double PowerOutput { get; set; }
         public double WindSpeed { get; set; }
+        
+        [MaxLength(255)]
+        public required string Country { get; set; }
+        
+        [MaxLength(255)]
+        public required string Area { get; set; }
     }
 }

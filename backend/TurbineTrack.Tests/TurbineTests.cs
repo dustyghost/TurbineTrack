@@ -6,33 +6,42 @@ namespace TurbineTrack.Tests;
 
 public class TurbineTests
 {
-    [Fact]
-    public async Task Can_Add_And_Retrieve_Turbine()
+    public static IEnumerable<object[]> TurbineSeedData =>
+        new List<object[]>
+        {
+            new object[]
+            {
+                new List<Turbine>
+                {
+                    new() { Location = "Ashby Farm", Status = "Operational", PowerOutput = 145.5, WindSpeed = 9.3, Country = "UK", Area = "Leicestershire" },
+                    new() { Location = "Nordwind Alpha", Status = "Operational", PowerOutput = 160.8, WindSpeed = 10.2, Country = "Germany", Area = "Lower Saxony" },
+                }
+            }
+        };
+    
+    [Theory]
+    [MemberData(nameof(TurbineSeedData))]
+    public async Task Can_Add_And_Retrieve_Turbines(List<Turbine> seedTurbines)
     {
-        // Arrange: create an in-memory DB context
         var options = new DbContextOptionsBuilder<TurbineContext>()
-            .UseInMemoryDatabase("TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         await using var context = new TurbineContext(options);
 
-        var newTurbine = new Turbine
-        {
-            Location = "Test Location",
-            Status = "Operational",
-            PowerOutput = 150.0,
-            WindSpeed = 12.5
-        };
-
-        // Act: save and retrieve
-        context.Turbines.Add(newTurbine);
+        context.Turbines.AddRange(seedTurbines);
         await context.SaveChangesAsync();
 
-        var turbines = await context.Turbines.ToListAsync();
+        var turbines = await context.Turbines.OrderBy(t => t.Location).ToListAsync();
 
-        // Assert
-        Assert.Single(turbines);
-        Assert.Equal("Test Location", turbines[0].Location);
-        Assert.Equal("Operational", turbines[0].Status);
+        Assert.Equal(seedTurbines.Count, turbines.Count);
+        
+        for (int i = 0; i < seedTurbines.Count; i++)
+        {
+            Assert.Equal(seedTurbines[i].Location, turbines[i].Location);
+            Assert.Equal(seedTurbines[i].Status, turbines[i].Status);
+            Assert.Equal(seedTurbines[i].Country, turbines[i].Country);
+        }
     }
+
 }
