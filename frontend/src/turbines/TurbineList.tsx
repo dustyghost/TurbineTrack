@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getTurbines, Turbine } from '../api/turbineAPI';
+import { getTurbines } from '../api/turbineAPI';
 import { Link } from 'react-router-dom';
+import { Turbine } from '../types/models';
 
 const TurbineList: React.FC = () => {
   const [turbines, setTurbines] = useState<Turbine[]>([]);
@@ -26,7 +27,9 @@ const TurbineList: React.FC = () => {
     let result = [...turbines];
 
     if (countryFilter) {
-      result = result.filter(t => t.country.toLowerCase() === countryFilter.toLowerCase());
+      result = result.filter(
+        t => t.area?.country?.name?.toLowerCase() === countryFilter.toLowerCase()
+      );
     }
 
     if (statusFilter) {
@@ -75,7 +78,7 @@ const TurbineList: React.FC = () => {
         {filtered.map((turbine) => (
           <li key={turbine.id} className="px-4 py-3 hover:bg-gray-50">
             <Link className="text-blue-500 hover:underline" to={`/turbines/${turbine.id}`}>
-              {turbine.location} — <span className="font-medium">{turbine.status}</span> ({turbine.country})
+              {turbine.location} — <span className="font-medium">{turbine.status}</span> ({turbine.area?.country?.name})
             </Link>
           </li>
         ))}
@@ -88,3 +91,4 @@ const TurbineList: React.FC = () => {
 };
 
 export default TurbineList;
+
