@@ -1,6 +1,17 @@
 version: '3'
 
+vars:
+  FRONTEND_DIR: ./frontend
+  BACKEND_DIR: ./backend/TurbineTrack
+  TESTS_DIR: ./backend/TurbineTrack.Tests
+
 tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  # ────── BUILD TASKS ──────
   build:
     desc: Build both backend and frontend
     aliases: [b]
@@ -11,31 +22,33 @@ tasks:
   build:backend:
     desc: Build the backend .NET project
     aliases: [bb]
-    dir: backend/TurbineTrack
+    dir: "{{.BACKEND_DIR}}"
     cmds:
       - dotnet build
 
   build:frontend:
     desc: Build the frontend Vite app
     aliases: [bf]
-    dir: frontend
+    dir: "{{.FRONTEND_DIR}}"
     cmds:
       - npm run build
 
+  # ────── DEV TASKS ──────
   start:backend:
     desc: Run the backend with dotnet watch
     aliases: [rb]
-    dir: backend/TurbineTrack
+    dir: "{{.BACKEND_DIR}}"
     cmds:
       - dotnet watch run
 
   start:frontend:
     desc: Run the frontend dev server
     aliases: [rf]
-    dir: frontend
+    dir: "{{.FRONTEND_DIR}}"
     cmds:
       - npm run dev
 
+  # ────── DOCKER TASKS ──────
   docker:build:
     desc: Build Docker containers
     aliases: [db]
@@ -60,16 +73,30 @@ tasks:
     cmds:
       - docker compose logs -f
 
-  db:update:
-    desc: Run EF Core migration
-    aliases: [ef]
-    dir: backend/TurbineTrack
+  docker:run:backend:
+    desc: Run backend Docker container (development mode)
+    aliases: [drb]
+    cmds:
+      - docker run -e ASPNETCORE_ENVIRONMENT=Development -p 8080:8080 turbine-api
+
+  # ────── DATABASE TASKS ──────
+  db:update:local:
+    desc: Apply EF Core migrations locally
+    aliases: [efl]
+    dir: "{{.BACKEND_DIR}}"
     cmds:
       - dotnet ef database update
 
+  db:update:docker:
+    desc: Apply EF Core migrations in Docker
+    aliases: [efd]
+    cmds:
+      - docker exec turbinetrack_api_dev dotnet ef database update
+
+  # ────── TEST TASKS ──────
   test:
     desc: Run backend tests
     aliases: [t]
-    dir: backend/TurbineTrack.Tests
+    dir: "{{.TESTS_DIR}}"
     cmds:
       - dotnet test

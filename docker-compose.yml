@@ -1,14 +1,27 @@
 services:
-  turbinetrack-api:
-    build: ./backend/TurbineTrack/
+  api:
+    build:
+      context: ./backend/TurbineTrack
+      dockerfile: Dockerfile.dev
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__TurbineContext=Data Source=/data/TurbineTrack.db
+      - ASPNETCORE_URLS=http://+:8080
     ports:
       - "8080:8080"
     volumes:
       - db_data:/data
     container_name: turbinetrack_api_dev
+
+  web:
+    build:
+      context: ./frontend
+    environment:
+    - VITE_API_BASE_URL=http://localhost:8080
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
 
 volumes:
   db_data:

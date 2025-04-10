@@ -26,10 +26,6 @@ secrets.json
 # VS Code workspace settings (optional)
 .vscode/
 
-# ASP.NET Identity files
-appsettings*.json
-!appsettings.Development.json  # allow committed dev config
-
 # HTTP test files
 *.http
 

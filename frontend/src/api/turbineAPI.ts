@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Turbine, Area, Country, TurbineCreate } from '../types/models';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5264',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
 });
 
 export const getTurbines = async (): Promise<Turbine[]> => {
