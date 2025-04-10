@@ -51,13 +51,13 @@ tasks:
 
   start:backend:
     desc: Start backend server
-    dir: backend
+    dir: backend/TurbineTrack
     cmds:
       - dotnet run
 
   test:backend:
     desc: Run backend tests
-    dir: backend
+    dir: backend/TurbineTrack.Tests
     cmds:
       - dotnet test
 
