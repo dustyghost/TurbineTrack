@@ -14,13 +14,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TurbineContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("TurbineContext")));
 
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost",
-        corsPolicyBuilder => corsPolicyBuilder
-            .WithOrigins("http://localhost:5173")
+    options.AddPolicy("AllowConfiguredOrigins", policy =>
+    {
+        policy.WithOrigins(allowedOrigins!)
             .AllowAnyHeader()
-            .AllowAnyMethod());
+            .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddScoped<ITurbineRepository, TurbineRepository>();
@@ -32,12 +35,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(); 
+    app.UseCors("AllowConfiguredOrigins");
 }
 
-app.UseCors("AllowLocalhost");
-
-app.UseHttpsRedirection();
+// Only enforce HTTPS redirection in non-development environments
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.MapTurbineEndpoints();
 app.MapRegionEndpoints();

@@ -1,63 +1,75 @@
 version: '3'
 
 tasks:
-  install:
-    desc: Install dependencies for both frontend and backend
-    cmds:
-      - task: install:frontend
-      - task: install:backend
-
   build:
-    desc: Build both frontend and backend
+    desc: Build both backend and frontend
+    aliases: [b]
     cmds:
-      - task: build:frontend
       - task: build:backend
+      - task: build:frontend
 
-  test:
-    desc: Run tests for both frontend and backend
+  build:backend:
+    desc: Build the backend .NET project
+    aliases: [bb]
+    dir: backend/TurbineTrack
     cmds:
-      - task: test:frontend
-      - task: test:backend
-
-  install:frontend:
-    desc: Install frontend dependencies
-    dir: frontend
-    cmds:
-      - npm install
-
-  install:backend:
-    desc: Install backend dependencies
-    dir: backend
-    cmds:
-      - dotnet restore
+      - dotnet build
 
   build:frontend:
-    desc: Build frontend
+    desc: Build the frontend Vite app
+    aliases: [bf]
     dir: frontend
     cmds:
       - npm run build
 
-  build:backend:
-    desc: Build backend
-    dir: backend
-    cmds:
-      - dotnet build
-
-  start:frontend:
-    desc: Start frontend development server
-    dir: frontend
-    cmds:
-      - npm start
-
   start:backend:
-    desc: Start backend server
+    desc: Run the backend with dotnet watch
+    aliases: [rb]
     dir: backend/TurbineTrack
     cmds:
-      - dotnet run
+      - dotnet watch run
 
-  test:backend:
+  start:frontend:
+    desc: Run the frontend dev server
+    aliases: [rf]
+    dir: frontend
+    cmds:
+      - npm run dev
+
+  docker:build:
+    desc: Build Docker containers
+    aliases: [db]
+    cmds:
+      - docker compose build
+
+  docker:up:
+    desc: Start Docker containers
+    aliases: [dup]
+    cmds:
+      - docker compose up -d
+
+  docker:down:
+    desc: Stop and remove Docker containers
+    aliases: [ddn]
+    cmds:
+      - docker compose down
+
+  docker:logs:
+    desc: View Docker logs
+    aliases: [dlog]
+    cmds:
+      - docker compose logs -f
+
+  db:update:
+    desc: Run EF Core migration
+    aliases: [ef]
+    dir: backend/TurbineTrack
+    cmds:
+      - dotnet ef database update
+
+  test:
     desc: Run backend tests
+    aliases: [t]
     dir: backend/TurbineTrack.Tests
     cmds:
       - dotnet test
-

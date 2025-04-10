@@ -1,0 +1,15 @@
+services:
+  turbinetrack-api:
+    build: ./backend/TurbineTrack/
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__TurbineContext=Data Source=/data/TurbineTrack.db
+    ports:
+      - "8080:8080"
+    volumes:
+      - db_data:/data
+    container_name: turbinetrack_api_dev
+
+volumes:
+  db_data:
+    driver: local
