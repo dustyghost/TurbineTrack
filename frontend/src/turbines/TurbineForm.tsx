@@ -8,6 +8,7 @@ import {
   getAreas,
 } from '../api/turbineAPI';
 import { Area, Country, Turbine, TurbineCreate } from '../types/models';
+import Select from '../components/Select.tsx'
 
 const TurbineForm: React.FC = () => {
   const { id } = useParams();
@@ -131,15 +132,14 @@ const TurbineForm: React.FC = () => {
 
         <div>
           <label className="block mb-1 font-medium">Status:</label>
-          <select
-            className="w-full border rounded px-3 py-2 bg-white focus:ring"
+          <Select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
             <option value="Operational">Operational</option>
             <option value="Maintenance">Maintenance</option>
             <option value="Faulty">Faulty</option>
-          </select>
+          </Select>
         </div>
 
         <div>
@@ -170,8 +170,7 @@ const TurbineForm: React.FC = () => {
 
         <div>
           <label className="block mb-1 font-medium">Country:</label>
-          <select
-            className="w-full border rounded px-3 py-2 bg-white focus:ring"
+          <Select
             value={selectedCountryId}
             onChange={(e) => setSelectedCountryId(Number(e.target.value))}
             required
@@ -182,13 +181,12 @@ const TurbineForm: React.FC = () => {
                 {c.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div>
           <label className="block mb-1 font-medium">Area:</label>
-          <select
-            className="w-full border rounded px-3 py-2 bg-white focus:ring"
+          <Select
             value={selectedAreaId}
             onChange={(e) => setSelectedAreaId(Number(e.target.value))}
             disabled={!selectedCountryId}
@@ -200,7 +198,7 @@ const TurbineForm: React.FC = () => {
                 {a.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <button

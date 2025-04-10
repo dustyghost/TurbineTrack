@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import Breadcrumbs from './Breadcrumbs'; // no need for .tsx
 
 const Layout: React.FC = () => (
   <div className="min-h-screen flex flex-col">
@@ -10,6 +11,7 @@ const Layout: React.FC = () => (
       </div>
     </nav>
     <main className="container mx-auto flex-grow p-6">
+      <Breadcrumbs />
       <Outlet />
     </main>
     <footer className="bg-gray-200 text-gray-600 py-4 text-center">

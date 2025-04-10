@@ -48,27 +48,20 @@ const TurbineDetail: React.FC = () => {
           <p><strong>Area:</strong> {turbine.area?.name}</p>
         </div>
       </div>
-
-      <div className="flex justify-between">
+      <div className="flex gap-4 mt-6">
         <Link
-          to={`/turbines/edit/${turbine.id}`}
-          className="text-blue-600 hover:underline"
+          to={`/turbines/${turbine.id}/edit`}
+          className="bg-blue-600 text-white font-medium px-4 py-2 rounded hover:bg-blue-700 transition"
         >
           Edit
         </Link>
 
         <button
           onClick={handleDelete}
-          className="text-red-600 hover:underline"
+          className="bg-red-600 text-white font-medium px-4 py-2 rounded hover:bg-red-700 transition"
         >
           Delete
         </button>
-      </div>
-
-      <div className="text-center mt-4">
-        <Link to="/turbines" className="text-sm text-gray-500 hover:underline">
-          ← Back to list
-        </Link>
       </div>
     </div>
   );

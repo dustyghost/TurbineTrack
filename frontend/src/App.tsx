@@ -13,7 +13,7 @@ const App: React.FC = () => (
         <Route path="turbines" element={<TurbineList />} />
         <Route path="turbines/:id" element={<TurbineDetail />} />
         <Route path="new" element={<TurbineForm />} />
-        <Route path="turbines/edit/:id" element={<TurbineForm />} />
+        <Route path="/turbines/:id/edit" element={<TurbineForm />} />
       </Route>
     </Routes>
   </BrowserRouter>
