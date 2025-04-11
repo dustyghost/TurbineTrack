@@ -8,6 +8,8 @@ TurbineTrack is a wind turbine monitoring app with a .NET backend and a modern V
 
 You can run the app either using Docker or locally.
 
+This app can be run with [TaskFile](https://taskfile.dev/)
+
 ---
 
 ## 🐳 Docker Setup
@@ -73,3 +75,16 @@ task rf
   - [Node.js 18+](https://nodejs.org/)
 - Run `task` on its own to list all available tasks.
 
+### Next Steps that could be done
+
+**Implement Security with SSO**
+Integrate Single Sign-On (e.g. using Azure AD, Okta, or AWS Cognito) to streamline authentication and improve security.
+
+**Add Playwright Tests**
+Introduce automated end-to-end testing with Playwright to improve confidence in the UI and critical user journeys.
+
+**Refactor Front End into Components**
+Break down large React views into smaller, reusable components for better maintainability and scalability.
+
+**Set Up CI/CD Pipelines & Deploy to AWS**
+Create automated pipelines (e.g. with GitHub Actions, GitLab CI, or Azure DevOps) to handle testing, building, and deployment to AWS (e.g. via ECS, Lambda, or Amplify).
